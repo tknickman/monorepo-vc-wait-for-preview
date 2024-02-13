@@ -12,7 +12,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           max_timeout: 60
-          environment: Preview - web
+          environment: Preview – monorepo-vc-wait-for-preview-web
 
           # access preview url
       - run: echo ${{steps.waitForWeb.outputs.url}}
