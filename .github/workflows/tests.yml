@@ -1,8 +1,9 @@
 name: Integration Tests
-on: [pull_request]
+on:
+  deployment_status:
 
 jobs:
-  e2e-tests:
+  integration-tests:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -10,9 +11,29 @@ jobs:
         uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
         id: waitForWeb
         with:
+          check_interval: 5
           token: ${{ secrets.GITHUB_TOKEN }}
-          max_timeout: 60
+          max_timeout: 90
           environment: Preview – monorepo-vc-wait-for-preview-web
 
           # access preview url
       - run: echo ${{steps.waitForWeb.outputs.url}}
+
+      - name: Waiting for 200 from the Vercel Preview
+        uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
+        id: waitForDocs
+        with:
+          check_interval: 5
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 90
+          environment: Preview – monorepo-vc-wait-for-preview-docs
+
+          # access preview url
+      - run: echo ${{steps.waitForDocs.outputs.url}}
+
+       # Step that runs only when both URLs are available
+      - name: Run tests using both URLs
+        if: steps.waitForWeb.outputs.url && steps.waitForDocs.outputs.url
+        run: |
+          echo "Both available!"
+          
