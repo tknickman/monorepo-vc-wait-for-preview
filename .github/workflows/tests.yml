@@ -10,8 +10,9 @@ jobs:
         uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
         id: waitForWeb
         with:
+          check_interval: 5
           token: ${{ secrets.GITHUB_TOKEN }}
-          max_timeout: 60
+          max_timeout: 90
           environment: Preview – monorepo-vc-wait-for-preview-web
 
           # access preview url
