@@ -1,0 +1,18 @@
+name: Integration Tests
+on: [pull_request]
+
+jobs:
+  e2e-tests:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - name: Waiting for 200 from the Vercel Preview
+        uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
+        id: waitForWeb
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 60
+          environment: Preview - web
+
+          # access preview url
+      - run: echo ${{steps.waitForWeb.outputs.url}}
